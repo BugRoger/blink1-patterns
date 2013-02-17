@@ -2,87 +2,46 @@ require "blink1"
 
 module Blink
   module Patterns
-    def self.breath(hex = "#0000ff", duration = 5, depth = 0.2) 
+    
+    def self.breath(hex_color = "#0000ff", length = 5, depth = 0.3) 
+      brightness = [0.0000, 0.0293, 0.1427, 0.4128, 0.8459, 1.0000, 0.8336, 0.5159, 0.2334, 0.0574, 0.0141, 0.0000]
+      interval   = [1.5,    1.0,    1.0,    1.0,    1.2,    1.5,    1.2,    1.2,    1.2,    1.2,    1.2,    0.0]
+      stretch    = length / interval.inject(:+) 
+
       Blink1.open do |blink|
-        blink.set_rgb(*Blink::Patterns.to_rgb(hex))
+        (0..11).each do |pos|
+          color    = Blink::Patterns.darken(hex_color, (1 - brightness[pos]) * depth)
+          duration = stretch * interval[pos] * 1000
+          blink.write_pattern_line(duration, *color, pos)
+        end
+        blink.play(0)
       end
     end
 
     def self.police
+      Blink1.open do |blink|
+        blink.write_pattern_line(500, *Blink::Patterns.to_rgb("#000000"), 0)
+        blink.write_pattern_line(100, *Blink::Patterns.to_rgb("#ff0000"), 1)
+        blink.write_pattern_line(500, *Blink::Patterns.to_rgb("#000000"), 2)
+        blink.write_pattern_line(100, *Blink::Patterns.to_rgb("#0000ff"), 3)
+        blink.write_pattern_line(0, 0, 0, 0, 4)
+        blink.write_pattern_line(0, 0, 0, 0, 5)
+        blink.write_pattern_line(0, 0, 0, 0, 6)
+        blink.write_pattern_line(0, 0, 0, 0, 7)
+        blink.write_pattern_line(0, 0, 0, 0, 8)
+        blink.write_pattern_line(0, 0, 0, 0, 9)
+        blink.write_pattern_line(0, 0, 0, 0, 10)
+        blink.write_pattern_line(0, 0, 0, 0, 11)
+        blink.play(0)
+      end 
     end
 
     def self.to_rgb(hex_color)
       hex_color.gsub('#','').scan(/../).map {|color| color.hex}
     end
+
+     def self.darken(hex_color, amount=0.4)
+       to_rgb(hex_color).map { |c| (c * (1 - amount)).round }
+     end
   end
 end
-
-
-#  def initialize
-#    blink.open
-#  end
-
-#  def finalize
-#    puts "Closing Blink1 Connection"
-#    blink.off
-#    blink.close
-#  end
-
-#  def breath(hex = "#0000ff", duration = 5, depth = 0.2) 
-#    play(animate_breath(hex, duration, depth))
-#  end
-
-#  def police
-#    animation = animate_breath("#ff0000", 0.5, 1) + animate_breath("#0000ff", 0.5, 1) 
-#    play(animation)
-#  end
-
-#  def play(animation, step = 0)
-#    timer.cancel if timer
-
-#    step = 0 if step >= animation.length
-#    r, g, b, t = animation[step] 
-
-#    @timer = after(t) do
-#      play(animation, step + 1)
-#    end
-
-#    blink.fade_to_rgb(t*1000, r, g, b)
-#  end
-
-
-#  # Amount should be a decimal between 0 and 1. Lower means darker
-#  def darken_color(hex_color, amount=0.4)
-#    hex_color = hex_color.gsub('#','')
-#    rgb = hex_color.scan(/../).map {|color| color.hex}
-#    rgb[0] = (rgb[0].to_i * amount).round
-#    rgb[1] = (rgb[1].to_i * amount).round
-#    rgb[2] = (rgb[2].to_i * amount).round
-#    rgb
-#  end
-
-#  # Amount should be a decimal between 0 and 1. Higher means lighter
-
-
-
-#  def animate_breath(hex = "#0000ff", duration = 5, depth = 0.2) 
-#    breath_in_duration  = 1.0
-#    breath_out_duration = 1.3 
-
-#    breath_in_interval  = 0.1 * duration * breath_in_duration  / (breath_in_duration + breath_out_duration)
-#    breath_out_interval = 0.1 * duration * breath_out_duration / (breath_in_duration + breath_out_duration)
-
-#    ease_in   = [1.0000, 0.9933, 0.9707, 0.9277, 0.8573, 0.7487, 0.5872, 0.3685, 0.1541, 0.0325, 0.0000].map{|v| [v, breath_in_interval] }
-#    ease_out  = [1.0000, 0.9859, 0.9426, 0.8694, 0.7666, 0.6362, 0.4841, 0.3212, 0.1664, 0.0476, 0.0000].reverse.map{|v| [v, breath_out_interval] }
-
-#    (ease_in + ease_out).map do |v, t|
-#      darken_color(hex, 1 - (v * depth)) << t
-#    end
-#  end
-
-#  private
-
-#  def blink
-#    @@blink ||= Blink1.new
-#  end
-#end

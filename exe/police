@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "blink1-patterns"
+
+Blink::Patterns.police
