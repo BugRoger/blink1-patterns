@@ -5,7 +5,7 @@ require 'blink1-patterns/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "blink1-patterns"
-  gem.version       = Blink1::Patterns::VERSION
+  gem.version       = Blink::Patterns::VERSION
   gem.authors       = ["Michael Schmidt"]
   gem.email         = ["michael.j.schmidt@gmail.com"]
   gem.description   = %q{TODO: Write a gem description}
@@ -16,4 +16,6 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
+
+  gem.add_dependency('rb-blink1')
 end
