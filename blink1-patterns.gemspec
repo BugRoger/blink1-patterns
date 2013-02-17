@@ -8,9 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Blink::Patterns::VERSION
   gem.authors       = ["Michael Schmidt"]
   gem.email         = ["michael.j.schmidt@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{Common Blink Patterns}
+  gem.summary       = %q{A collection of patterns for the Blink(1) indicator light}
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^exe/}).map{ |f| File.basename(f) }
