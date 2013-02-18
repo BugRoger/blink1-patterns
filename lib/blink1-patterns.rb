@@ -1,5 +1,3 @@
-require "blink1"
-
 module Blink
   module Patterns
     
@@ -8,40 +6,44 @@ module Blink
       interval   = [1.5,    1.0,    1.0,    1.0,    1.2,    1.5,    1.2,    1.2,    1.2,    1.2,    1.2,    0.0]
       stretch    = length / interval.inject(:+) 
 
-      Blink1.open do |blink|
-        (0..11).each do |pos|
-          color    = Blink::Patterns.darken(hex_color, (1 - brightness[pos]) * depth)
-          duration = stretch * interval[pos] * 1000
-          blink.write_pattern_line(duration, *color, pos)
-        end
-        blink.play(0)
+      (0..11).each do |pos|
+        color    = Blink::Patterns.darken(hex_color, (1 - brightness[pos]) * depth)
+        duration = stretch * interval[pos] * 1000
+        write_pattern_line(duration, *color, pos)
+        play
       end
     end
 
     def self.police
-      Blink1.open do |blink|
-        blink.write_pattern_line(500, *Blink::Patterns.to_rgb("#000000"), 0)
-        blink.write_pattern_line(100, *Blink::Patterns.to_rgb("#ff0000"), 1)
-        blink.write_pattern_line(500, *Blink::Patterns.to_rgb("#000000"), 2)
-        blink.write_pattern_line(100, *Blink::Patterns.to_rgb("#0000ff"), 3)
-        blink.write_pattern_line(0, 0, 0, 0, 4)
-        blink.write_pattern_line(0, 0, 0, 0, 5)
-        blink.write_pattern_line(0, 0, 0, 0, 6)
-        blink.write_pattern_line(0, 0, 0, 0, 7)
-        blink.write_pattern_line(0, 0, 0, 0, 8)
-        blink.write_pattern_line(0, 0, 0, 0, 9)
-        blink.write_pattern_line(0, 0, 0, 0, 10)
-        blink.write_pattern_line(0, 0, 0, 0, 11)
-        blink.play(0)
-      end 
+      write_pattern_line(500, *Blink::Patterns.to_rgb("#000000"), 0)
+      write_pattern_line(100, *Blink::Patterns.to_rgb("#ff0000"), 1)
+      write_pattern_line(500, *Blink::Patterns.to_rgb("#000000"), 2)
+      write_pattern_line(100, *Blink::Patterns.to_rgb("#0000ff"), 3)
+      write_pattern_line(0, 0, 0, 0, 4)
+      write_pattern_line(0, 0, 0, 0, 5)
+      write_pattern_line(0, 0, 0, 0, 6)
+      write_pattern_line(0, 0, 0, 0, 7)
+      write_pattern_line(0, 0, 0, 0, 8)
+      write_pattern_line(0, 0, 0, 0, 9)
+      write_pattern_line(0, 0, 0, 0, 10)
+      write_pattern_line(0, 0, 0, 0, 11)
+      play
     end
 
     def self.to_rgb(hex_color)
       hex_color.gsub('#','').scan(/../).map {|color| color.hex}
     end
 
-     def self.darken(hex_color, amount=0.4)
-       to_rgb(hex_color).map { |c| (c * (1 - amount)).round }
-     end
+    def self.darken(hex_color, amount=0.4)
+      to_rgb(hex_color).map { |c| (c * (1 - amount)).round }
+    end
+
+    def self.write_pattern_line(duration, r, g, b, pos)
+      `blink1-tool -m #{duration.to_i} --savergb #{r},#{g},#{b},#{pos}`
+    end
+
+    def self.play
+      `blink1-tool --play 1,0`
+    end
   end
 end
