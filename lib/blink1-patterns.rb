@@ -30,6 +30,10 @@ module Blink
       play
     end
 
+    def self.off
+      `blink1-tool --off`
+    end
+
     def self.to_rgb(hex_color)
       hex_color.gsub('#','').scan(/../).map {|color| color.hex}
     end
