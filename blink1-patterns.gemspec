@@ -12,8 +12,8 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{A collection of patterns for the Blink(1) indicator light}
 
   gem.files         = `git ls-files`.split($/)
-  gem.executables   = gem.files.grep(%r{^exe/}).map{ |f| File.basename(f) }
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.executables   = `git ls-files -- exe/*`.split("\n").map{ |f| File.basename(f) }
+  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.require_paths = ["lib"]
   gem.bindir        = 'exe'
 
