@@ -11,7 +11,7 @@ module Blink
       Blink1.open do |blink|
         (0..11).each do |pos|
           color    = Blink::Patterns.darken(hex_color, (1 - brightness[pos]) * depth)
-          duration = stretch * interval[pos] * 1000
+          duration = (stretch * interval[pos] * 1000).to_i
           blink.write_pattern_line(duration, *color, pos)
         end
         blink.play(0)
@@ -36,6 +36,12 @@ module Blink
       end 
     end
 
+    def self.off
+      Blink1.open do |blink|
+        blink.off
+      end
+    end
+
     def self.to_rgb(hex_color)
       hex_color.gsub('#','').scan(/../).map {|color| color.hex}
     end
@@ -45,3 +51,5 @@ module Blink
      end
   end
 end
+
+Blink::Patterns.breath
