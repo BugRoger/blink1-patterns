@@ -51,5 +51,3 @@ module Blink
      end
   end
 end
-
-Blink::Patterns.breath
