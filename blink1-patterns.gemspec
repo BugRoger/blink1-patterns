@@ -16,6 +16,4 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
   gem.bindir        = 'exe'
-
-  gem.add_dependency('rb-blink1')
 end
